@@ -33,6 +33,7 @@ int main(int argc, char* argv[]) {
     Stack_PNode* result = NULL;
     DepthFirstSearch(graph, &result);
     Draw(world_map, result);
+    Graph_Destroy(graph);
 
     exit:
     return 0;
