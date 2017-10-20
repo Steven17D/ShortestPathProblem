@@ -6,7 +6,7 @@
 #include <malloc.h>
 #include <assert.h>
 #include <SDL2/SDL_quit.h>
-#include "../src/stack.h"
+#include "../stack.h"
 
 define_Stack(Uint16)
 

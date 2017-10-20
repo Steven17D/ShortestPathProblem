@@ -5,10 +5,8 @@
 #include <stdio.h>
 #include <afxres.h>
 #include <assert.h>
-#include "../src/properties.h"
-#include "../src/graph.h"
-
-//#define INTERACTIVE_TEST
+#include "../properties.h"
+#include "../graph.h"
 
 void interactive_test(Graph *graph);
 
@@ -24,6 +22,7 @@ int main() {
 
     Graph* graph = Graph_Create(world_map);
 
+#ifdef DIAGONAL
     assert(graph->position.x == 0 && graph->position.y == 0);
     assert(graph->adjacent_nodes_count == 3);
     assert(graph->value == 0);
@@ -45,8 +44,7 @@ int main() {
     assert(graph->position.x == MAX_DIMENSION/2 && graph->position.y == MAX_DIMENSION/2);
     assert(graph->adjacent_nodes_count == 8);
     assert(graph->value == 0);
-
-#ifdef INTERACTIVE_TEST
+#else
     interactive_test(graph);
 #endif
 
