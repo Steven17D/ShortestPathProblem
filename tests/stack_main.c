@@ -14,7 +14,7 @@ BOOL predicate_Uint16(Uint16 a, Uint16 b) { return a == b;}
 
 int main() {
     Stack_Uint16 *s = Stack_Create_Uint16();
-    Uint16 stack_items = 256;
+    Uint16 stack_items = 32000;
 
     assert(Stack_Size_Uint16(s) == 0);
     assert(Stack_IsEmpty_Uint16(s) == TRUE);
@@ -39,6 +39,7 @@ int main() {
 
     assert(Stack_Size_Uint16(s) == 0);
     assert(Stack_IsEmpty_Uint16(s) == TRUE);
+    assert(s->allocated_size == 10);
 
     Stack_Destroy_Uint16(s);
     return 0;
