@@ -6,6 +6,8 @@ set(CMAKE_C_STANDARD 90)
 # gcc main1.c -IC:\MinGW\include -LC:\MinGW\lib -w -Wl,-subsystem,windows -lmingw32 -lSDL2main -lSDL2 -o main.exe
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w -Wl,-subsystem,windows")
 
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
 set(SOURCE_FILES
         src/main.c
         src/properties.h

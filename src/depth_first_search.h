@@ -19,7 +19,6 @@ int CalculatePathWeight(PStack_PNode path);
 BOOL Predicate_PNode(PNode a, PNode b) {
     return a == b;
 }
-int ComparePNode(const void* a, const void* b);
 
 int DepthFirstSearch(Graph *start_node, OUT PStack_PNode* result) {
     *result = NULL;
@@ -36,6 +35,10 @@ int DepthFirstSearch(Graph *start_node, OUT PStack_PNode* result) {
     while (Stack_Size_PStack_PNode(path_stack) != 0) {
         // Handle path
         PStack_PNode current_path = Stack_Pop_PStack_PNode(path_stack);
+        int current_path_weight = CalculatePathWeight(current_path);
+        if (*result != NULL && current_path_weight > minimal_path_weight) {
+            continue;
+        }
 
 #ifdef DEBUG
         // Print current path
@@ -58,7 +61,6 @@ int DepthFirstSearch(Graph *start_node, OUT PStack_PNode* result) {
 
         PNode current_node = Stack_Peek_PNode(current_path);
 
-        qsort(current_node->adjacent_nodes, current_node->adjacent_nodes_count, sizeof(Node*), ComparePNode);
         UINT i; for (i = 0; i < current_node->adjacent_nodes_count; ++i) {
             PNode current_neighbor = current_node->adjacent_nodes[i];
             if (Stack_Find_PNode(current_path, current_neighbor, Predicate_PNode) == -1) {
@@ -70,7 +72,7 @@ int DepthFirstSearch(Graph *start_node, OUT PStack_PNode* result) {
                 }
                 Stack_Push_PNode(new_path, current_neighbor);
 
-                int new_path_weight = CalculatePathWeight(new_path);
+                int new_path_weight = current_path_weight + current_neighbor->value;
                 if (current_neighbor->position.x == MAX_DIMENSION-1 && current_neighbor->position.y == MAX_DIMENSION-1) {
                     // Found successful path
                     // Update shortest path if found shorted one
@@ -78,14 +80,16 @@ int DepthFirstSearch(Graph *start_node, OUT PStack_PNode* result) {
                         *result = new_path;
                         minimal_path_weight = new_path_weight;
                     } else if (minimal_path_weight > new_path_weight) {
-                        minimal_path_weight = new_path_weight;
-                        if (*result != NULL) {
-                            free(*result);
-                        }
+                        Stack_Destroy_PNode(*result);
                         *result = new_path;
+                        minimal_path_weight = new_path_weight;
+                    } else {
+                        Stack_Destroy_PNode(new_path);
                     }
                 } else if (*result == NULL || minimal_path_weight > new_path_weight ) {
                     Stack_Push_PStack_PNode(path_stack, new_path);
+                } else {
+                    Stack_Destroy_PNode(new_path);
                 }
             }
         }
@@ -117,8 +121,4 @@ int CalculatePathWeight(PStack_PNode path) {
         path_weight += current_item->value;
     }
     return path_weight;
-}
-
-int ComparePNode(const void *a, const void *b) {
-    return ((*(PNode*)a)->value - (*(PNode*)b)->value);
 }
