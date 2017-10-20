@@ -8,9 +8,9 @@
 #include "depth_first_search.h"
 
 
-BOOL Draw(short world_map[MAX_DIMENSION][MAX_DIMENSION], Stack_PNode* pNode);
+BOOL Draw(short world_map[MAX_DIMENSION][MAX_DIMENSION], Path shortest_path);
 
-void DrawBackground(SDL_Renderer *renderer, short world_map[MAX_DIMENSION][MAX_DIMENSION], Stack_PNode* pNode);
+void DrawBackground(SDL_Renderer *renderer, short world_map[MAX_DIMENSION][MAX_DIMENSION], Path shortest_path);
 
 int main(int argc, char* argv[]) {
     char file_name[MAX_PATH] = { '\0' };
@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
     fclose(world_map_file);
 
     Graph* graph = Graph_Create(world_map);
-    Stack_PNode* result = NULL;
+    Path result = NULL;
     DepthFirstSearch(graph, &result);
     Draw(world_map, result);
     Graph_Destroy(graph);
@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-BOOL Draw(short world_map[MAX_DIMENSION][MAX_DIMENSION], Stack_PNode* shortest_path) {
+BOOL Draw(short world_map[MAX_DIMENSION][MAX_DIMENSION], Path shortest_path) {
     SDL_Window* window = SDL_CreateWindow(
             "World Map",
             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,

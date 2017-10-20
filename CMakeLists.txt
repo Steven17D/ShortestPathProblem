@@ -15,7 +15,8 @@ set(SOURCE_FILES
         src/circle.h src/circle.c
         src/file_utils.c src/file_utils.h
         src/graph.h src/graph.c
-        src/depth_first_search.c src/depth_first_search.h)
+        src/depth_first_search.h
+        src/String.c src/String.h)
 
 add_executable(ShortestPathProblem ${SOURCE_FILES})
 set_target_properties(ShortestPathProblem
@@ -24,14 +25,20 @@ target_link_libraries(ShortestPathProblem mingw32 SDL2main SDL2)
 
 # Tests
 set(STACK_TEST_FILES
-        tests/stack_main.c
+        src/tests/stack_main.c
         src/stack.h)
 
 add_executable(StackTest ${STACK_TEST_FILES})
 
 set(GRAPH_TEST_FILES
-        tests/graph_main.c
+        src/tests/graph_main.c
         src/graph.h src/graph.c)
 
 add_executable(GraphTest ${GRAPH_TEST_FILES})
+
+set(STRING_TEST_FILES
+        src/tests/string_main.c
+        src/String.h src/String.c)
+
+add_executable(StringTest ${STRING_TEST_FILES})
 
