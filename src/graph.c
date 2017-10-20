@@ -4,6 +4,14 @@
 
 #include "graph.h"
 
+#ifdef DIAGONAL
+#define DEFAULT_NEIGHBOR_COUNT 8
+#else
+#define DEFAULT_NEIGHBOR_COUNT 4
+#endif
+
+int ComparePNode(const void *a, const void *b);
+
 Graph *Graph_Create(const short world_map[MAX_DIMENSION][MAX_DIMENSION]) {
     Node* nodes[MAX_DIMENSION][MAX_DIMENSION] = { NULL };
 
@@ -21,12 +29,19 @@ Graph *Graph_Create(const short world_map[MAX_DIMENSION][MAX_DIMENSION]) {
     for (x = 0; x < MAX_DIMENSION; ++x) {
         for (y = 0; y < MAX_DIMENSION; ++y) {
             unsigned short counter = 0;
+#ifdef DIAGONAL
             int neighbors[DEFAULT_NEIGHBOR_COUNT][2] = {
                     {x-1, y+1}, {x, y+1}, {x+1, y+1},
                     {x-1, y},             {x+1, y},
                     {x-1, y-1}, {x, y-1}, {x+1, y-1}
             };
-
+#else
+            int neighbors[DEFAULT_NEIGHBOR_COUNT][2] = {
+                                {x, y+1},
+                    {x-1, y},             {x+1, y},
+                                {x, y-1}
+            };
+#endif
             int i;
             int neighbor_x, neighbor_y;
             for (i = 0; i < DEFAULT_NEIGHBOR_COUNT; ++i) {
@@ -40,6 +55,8 @@ Graph *Graph_Create(const short world_map[MAX_DIMENSION][MAX_DIMENSION]) {
 
             nodes[x][y]->adjacent_nodes = realloc(nodes[x][y]->adjacent_nodes, sizeof(Node*) * counter);
             nodes[x][y]->adjacent_nodes_count = counter;
+
+            qsort(nodes[x][y]->adjacent_nodes, nodes[x][y]->adjacent_nodes_count, sizeof(Node*), ComparePNode);
         }
     }
 
@@ -73,4 +90,8 @@ void Graph_Destroy(PGraph graph) {
         free(currentNode);
     }
     Stack_Destroy_PGraph(stack);
+}
+
+int ComparePNode(const void *a, const void *b) {
+    return ((*(PNode*)a)->value - (*(PNode*)b)->value);
 }

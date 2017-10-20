@@ -10,7 +10,7 @@
 
 //#define INTERACTIVE_TEST
 
-void interactive_test(Graph *pNode);
+void interactive_test(Graph *graph);
 
 int main() {
     short int world_map[MAX_DIMENSION][MAX_DIMENSION];
@@ -27,10 +27,6 @@ int main() {
     assert(graph->position.x == 0 && graph->position.y == 0);
     assert(graph->adjacent_nodes_count == 3);
     assert(graph->value == 0);
-
-    assert(graph->adjacent_nodes[0]->position.x == 0 && graph->adjacent_nodes[0]->position.y == 1);
-    assert(graph->adjacent_nodes[0]->value == 1);
-    assert(graph->adjacent_nodes[0]->adjacent_nodes_count == 5);
 
     while (TRUE) {
         if (graph->position.x == MAX_DIMENSION/2 && graph->position.y == MAX_DIMENSION/2) {
@@ -49,18 +45,6 @@ int main() {
     assert(graph->position.x == MAX_DIMENSION/2 && graph->position.y == MAX_DIMENSION/2);
     assert(graph->adjacent_nodes_count == 8);
     assert(graph->value == 0);
-
-    assert(graph->adjacent_nodes[0]->position.x == 49 && graph->adjacent_nodes[0]->position.y == 51);
-    assert(graph->adjacent_nodes[0]->value == 2);
-    assert(graph->adjacent_nodes[0]->adjacent_nodes_count == 8);
-
-    assert(graph->adjacent_nodes[1]->position.x == 50 && graph->adjacent_nodes[0]->position.y == 51);
-    assert(graph->adjacent_nodes[1]->value == 1);
-    assert(graph->adjacent_nodes[1]->adjacent_nodes_count == 8);
-
-    assert(graph->adjacent_nodes[2]->position.x == 51 && graph->adjacent_nodes[0]->position.y == 51);
-    assert(graph->adjacent_nodes[2]->value == 0);
-    assert(graph->adjacent_nodes[2]->adjacent_nodes_count == 8);
 
 #ifdef INTERACTIVE_TEST
     interactive_test(graph);
