@@ -83,12 +83,15 @@ BOOL OpenFileDialog(char *fileName)
 BOOL OpenFileDialog(char *fileName) {
     OPENFILENAME ofn;       // common dialog box structure
     HWND hwnd = NULL;       // owner window
+    char title[MAX_PATH];
+    sprintf(title, "Open world map %d by %d", MAX_DIMENSION, MAX_DIMENSION);
 
     // Initialize OPENFILENAME
     ZeroMemory(&ofn, sizeof(ofn));
     ofn.lStructSize = sizeof(ofn);
     ofn.hwndOwner = hwnd;
     ofn.lpstrFile = fileName;
+    ofn.lpstrTitle = title;
     // Set lpstrFile[0] to '\0' so that GetOpenFileName does not
     // use the contents of szFile to initialize itself.
     ofn.lpstrFile[0] = '\0';
