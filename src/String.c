@@ -44,8 +44,9 @@ void String_ShrinkToFit(String *this) {
 }
 
 void String_AppendChar(String *this, const char c) {
-    char s[2] = { c, '\0'};
-    String_AppendChars(this, s);
+    ++this->size;
+    this->string = realloc(this->string, this->size);
+    this->string[this->size - 2] = c;
 }
 
 void String_AppendChars(String *this, const char *str) {
