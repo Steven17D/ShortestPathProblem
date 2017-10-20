@@ -3,6 +3,7 @@
 //
 
 #include <windef.h>
+#include "String.h"
 
 #define define_Stack(type) \
 typedef struct Stack_##type { \
@@ -72,4 +73,25 @@ BOOL Stack_IsEmpty_##type(Stack_##type *stack) { \
 } \
 UINT Stack_Size_##type(Stack_##type *stack) { \
     return stack->used_size; \
+} \
+int Stack_format_##type(Stack_##type *stack, String *str, int (*formatter)(String*, type), String* delimiter) { \
+    String* item_str = String_Create(); \
+    int total_char_writen = 0; \
+    int delimiter_len = String_Size(delimiter); \
+    UINT i; for (i = 0; (i + 1) < stack->used_size; ++i) { \
+        int char_writen = formatter(item_str, Stack_PeekAt_##type(stack, i));\
+        if (char_writen < 0) return char_writen; \
+        String_AppendString(str, item_str); \
+        total_char_writen += char_writen; \
+        String_AppendString(str, delimiter); \
+        total_char_writen += delimiter_len; \
+    } \
+    if (stack->used_size > 0) { \
+        int char_writen = formatter(item_str, Stack_PeekAt_##type(stack, stack->used_size - 1));\
+        if (char_writen < 0) return char_writen; \
+        String_AppendString(str, item_str); \
+        total_char_writen += char_writen; \
+    } \
+    String_Destroy(item_str); \
+    return total_char_writen; \
 }
