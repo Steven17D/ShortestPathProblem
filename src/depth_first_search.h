@@ -7,7 +7,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
-//#define DEBUG
+#define DEBUG
+//#define RECURSIVE_MODE
 
 define_Stack(PNode)
 typedef Stack_PNode* Path;
@@ -35,15 +36,76 @@ int PNode_formatter(String *str, PNode item) {
 }
 
 int Path_formatter(String *str, Path item) {
-    String_Reserve(str, 32);
     String *PNode_delimiter = String_CreateCopy("->");
     int size = Stack_format_PNode(item, str, PNode_formatter, PNode_delimiter);
     String_Destroy(PNode_delimiter);
-    String_ShrinkToFit(str);
     return size;
 
 }
+#ifdef RECURSIVE_MODE
+// Average time is 1.533600 seconds in release 8x8
+Path* _result = NULL;
+int weight;
+void DepthFirstSearchLogic(Path path){
+    int current_path_weight = CalculatePathWeight(path);
+    PNode current_node = Stack_Peek_PNode(path);
+    UINT i; for (i = 0; i < current_node->adjacent_nodes_count; ++i) {
+        PNode current_neighbor = current_node->adjacent_nodes[i];
+        if (Stack_Find_PNode(path, current_neighbor, Predicate_PNode) == -1) {
+            // Was not visited
+            // Append node to current_path and add it the path_stack
+            Path new_path = Stack_Create_PNode();
+            UINT j; for (j = 0; j < Stack_Size_PNode(path); ++j) {
+                Stack_Push_PNode(new_path, Stack_PeekAt_PNode(path, j));
+            }
+            Stack_Push_PNode(new_path, current_neighbor);
 
+            int new_path_weight = current_path_weight + current_neighbor->value;
+            if (current_neighbor->position.x == MAX_DIMENSION-1 && current_neighbor->position.y == MAX_DIMENSION-1) {
+                // Found successful path
+                // Update shortest path if found shorted one
+                if (*_result == NULL) {
+                    *_result = new_path;
+                    weight = new_path_weight;
+                } else if (weight > new_path_weight) {
+                    Stack_Destroy_PNode(*_result);
+                    *_result = new_path;
+                    weight = new_path_weight;
+                } else {
+                    Stack_Destroy_PNode(new_path);
+                }
+            } else if (*_result == NULL || weight > new_path_weight ) {
+                DepthFirstSearchLogic(new_path);
+                Stack_Destroy_PNode(new_path);
+            } else {
+                Stack_Destroy_PNode(new_path);
+            }
+        }
+    }
+}
+
+int DepthFirstSearch(Graph *start_node, OUT Path* result) {
+    *result = NULL;
+    _result = result;
+    Path initial_path = Stack_Create_PNode();
+    Stack_Push_PNode(initial_path, start_node);
+    DepthFirstSearchLogic(initial_path);
+    Stack_Destroy_PNode(initial_path);
+    if (*result != NULL) {
+        String* shortest_path_str = String_Create();
+        String* shortest_path_delimiter = String_CreateCopy("->");
+        Stack_format_PNode(*result, shortest_path_str, PNode_formatter, shortest_path_delimiter);
+        String_Destroy(shortest_path_delimiter);
+        printf("Shortest path: %s\n", String_CStr(shortest_path_str));
+        String_Destroy(shortest_path_str);
+        printf("Path length: %d\n", Stack_Size_PNode(*result));
+        printf("Path weight: %d\n", weight);
+    } else {
+        printf("There is no path\n");
+    }
+}
+#else
+// Average time is 0.212450 seconds in release 8x8
 int DepthFirstSearch(Graph *start_node, OUT Path* result) {
     *result = NULL;
     int minimal_path_weight = -1;
@@ -139,3 +201,4 @@ int DepthFirstSearch(Graph *start_node, OUT Path* result) {
     Stack_Destroy_Path(path_stack);
     return minimal_path_weight;
 }
+#endif
