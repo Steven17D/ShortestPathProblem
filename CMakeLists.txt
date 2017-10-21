@@ -42,3 +42,11 @@ set(STRING_TEST_FILES
 
 add_executable(StringTest ${STRING_TEST_FILES})
 
+set(DEPTH_FIRST_SEARCH_TEST_FILES
+        src/tests/depth_first_search_test.c
+        src/String.h src/String.c
+        src/graph.h src/graph.c
+        src/depth_first_search.h)
+
+add_executable(DepthFirstSearchTest ${DEPTH_FIRST_SEARCH_TEST_FILES})
+
