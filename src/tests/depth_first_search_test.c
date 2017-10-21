@@ -23,6 +23,7 @@ int main() {
     world_map[0][2] = 0;
     world_map[1][2] = 0;
     world_map[2][2] = 0;
+    world_map[2][3] = 0;
 #endif
 
     Graph* graph = Graph_Create(world_map);

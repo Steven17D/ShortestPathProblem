@@ -45,7 +45,7 @@ int main() {
 
     assert(Stack_Size_Uint16(s) == 0);
     assert(Stack_IsEmpty_Uint16(s) == TRUE);
-    assert(s->allocated_size == 10);
+    assert(s->allocated_size == s->allocation_coefficient);
 
     Uint16 stack_items_print = 16;
     String *str = String_Create();

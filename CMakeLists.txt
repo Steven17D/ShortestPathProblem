@@ -25,19 +25,21 @@ target_link_libraries(ShortestPathProblem mingw32 SDL2main SDL2)
 
 # Tests
 set(STACK_TEST_FILES
-        src/tests/stack_main.c
+        src/tests/stack_test.c
+        src/String.h src/String.c
         src/stack.h)
 
 add_executable(StackTest ${STACK_TEST_FILES})
 
 set(GRAPH_TEST_FILES
-        src/tests/graph_main.c
+        src/tests/graph_test.c
+        src/String.h src/String.c
         src/graph.h src/graph.c)
 
 add_executable(GraphTest ${GRAPH_TEST_FILES})
 
 set(STRING_TEST_FILES
-        src/tests/string_main.c
+        src/tests/string_test.c
         src/String.h src/String.c)
 
 add_executable(StringTest ${STRING_TEST_FILES})
