@@ -19,7 +19,7 @@ Stack_##type* Stack_Create_##type() { \
     stack->stack = NULL; \
     stack->used_size = 0; \
     stack->allocated_size = 0; \
-    stack->allocation_coefficient = 10; \
+    stack->allocation_coefficient = 64; \
     return stack; \
 } \
 void Stack_Destroy_##type(Stack_##type *stack){ \
