@@ -8,7 +8,8 @@
 
 typedef struct String {
     char *string;
-    UINT size;
+    UINT length;
+    UINT allocated_size;
 } String;
 
 String* String_Create();
